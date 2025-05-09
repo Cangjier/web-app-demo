@@ -39,7 +39,7 @@ const LocalServices = () => {
     }
 
     const getSettings = async () => {
-        let response = await runAsync("user-settings", {}, (progress: IProgress) => {
+        let response = await runAsync("settings-get", {}, (progress: IProgress) => {
             // console.log(progress);
         });
         return response;

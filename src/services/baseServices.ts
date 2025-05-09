@@ -3,7 +3,7 @@ import { IProgress } from "./interfaces";
 
 export const BaseServices = (baseURL: string | undefined) => {
     const api = axios.create({
-        baseURL: baseURL
+        baseURL: baseURL ?? window.location.href
     });
 
     const _runAsync = async (pluginName: string, input: any) => {

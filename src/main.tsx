@@ -13,6 +13,9 @@ InjectStyle(`
 body{
   margin:0;
 }
+.ant-btn:not(:disabled):focus-visible {
+  outline: none;
+}
 `);
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

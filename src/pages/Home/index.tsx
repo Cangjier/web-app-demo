@@ -137,7 +137,7 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
                 cursor: 'pointer',
                 userSelect: 'none'
             }}>
-                {"Easy PLM"}
+                {"Web App"}
             </Flex>
 
             <Flex className={dragClass} onMouseDown={e => {

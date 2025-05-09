@@ -126,6 +126,7 @@ export const Settings = forwardRef<ISettingsRef, ISettingsProps>((props, ref) =>
     };
     return <Flex direction='column' style={{
         height: '100vh',
+        width: '100vw',
         backgroundColor: 'rgb(247, 247, 247)',
     }} spacing={'4px'}>
         <Spin size={'large'} tip={<div style={{

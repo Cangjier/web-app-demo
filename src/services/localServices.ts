@@ -38,11 +38,19 @@ const LocalServices = () => {
         return response as ILoginInfo;
     }
 
+    const getSettings = async () => {
+        let response = await runAsync("user-settings", {}, (progress: IProgress) => {
+            // console.log(progress);
+        });
+        return response;
+    }
+
     return {
         getUserInfo,
         logout,
         login,
         getLoginInfo,
+        getSettings,
         ...base
     }
 }

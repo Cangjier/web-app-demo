@@ -29,6 +29,7 @@ export const ClientServices = () => {
     }
 
     const home = async () => {
+        console.log("home");
         let response = await api.post("/api/v1/app/home");
         if (response.status === 200) {
             return true;

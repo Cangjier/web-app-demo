@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Home } from './pages/Home';
+import { Login } from './pages/Login';
+import { Settings } from './pages/Settings';
+import { Chapters } from './pages/Chapters';
 const VITE_PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;
 
 const root = ReactDOM.createRoot(
@@ -13,6 +16,9 @@ root.render(
     <BrowserRouter basename={VITE_PUBLIC_URL}>
       <Routes>
         <Route path="/" element={<Home style={{ width: '100vw', height: '100vh' }}></Home>} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/chapters" element={<Chapters />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

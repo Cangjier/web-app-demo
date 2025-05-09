@@ -58,8 +58,28 @@ export const BaseServices = (baseURL: string | undefined) => {
             throw new Error(response.data.message)
         }
     }
+    const run = async (pluginName: string, input: any) => {
+        let response = await api.post(`/api/v1/tasks/run`, {
+            Input: input,
+            Processor: {
+                Type: "Plugin",
+                Name: pluginName
+            }
+        });
+        if (response.status === 200) {
+            if (response.data.success) {
+                return response.data.data.Output;
+            } else {
+                throw new Error(response.data.message);
+            }
+        }
+        else {
+            throw new Error(`${response.status}`);
+        }
+    }
     return {
         api,
-        runAsync
+        runAsync,
+        run
     }
 }

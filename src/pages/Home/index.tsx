@@ -131,9 +131,9 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
                 fontStyle: 'italic',
                 fontWeight: 'bold',
                 fontSize: '24px',
-                color: '#1890ff',
-                letterSpacing: '2px',
-                textShadow: '0px 0px 2px #1890ff',
+                color: '#333',
+                letterSpacing: '3px',
+                textShadow: '2px 2px 4px rgba(0,0,0,0.2), 0 0 10px rgba(100,100,100,0.1)',
                 cursor: 'pointer',
                 userSelect: 'none'
             }}>

@@ -1,6 +1,6 @@
 import React, { ReactNode, forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { Flex, InjectClass, useUpdate } from "../../natived";
-import { Avatar, Button, Card, Dropdown, Spin } from "antd";
+import { Avatar, Button, Card, ConfigProvider, Dropdown, Spin } from "antd";
 import { CloseOutlined, MinusOutlined, SettingOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { localServices } from "../../services/localServices.ts";
@@ -177,6 +177,7 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
                     clientServices.close();
                 }}>{"Close"}</Button>
             </Flex>
+
         </Flex>
         {/* 主体 */}
         <Flex style={{

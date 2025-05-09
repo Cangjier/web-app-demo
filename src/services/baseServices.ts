@@ -1,7 +1,7 @@
 import axios from "axios";
 import { IProgress } from "./interfaces";
 
-export const BaseServices = (baseURL: string) => {
+export const BaseServices = (baseURL: string | undefined) => {
     const api = axios.create({
         baseURL: baseURL
     });

@@ -10,7 +10,7 @@ if (debug) {
     console.log("!!! Debug Mode");
 }
 const RemoteServices = () => {
-    const base = BaseServices("http://localhost:19799");
+    const base = BaseServices(undefined);
     const api = base.api;
     const getLayout = async () => {
         let response = await api.get("/layout.json");

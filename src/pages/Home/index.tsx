@@ -4,13 +4,15 @@ import { Avatar, Button, Card, Dropdown, Spin } from "antd";
 import { CloseOutlined, MinusOutlined, SettingOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { localServices } from "../../services/localServices.ts";
-import { ReactComponent as SidebarSvg } from "../../svgs/Sidebar.svg";
+import SidebarSvg from "../../svgs/Sidebar.svg?react";
 import Icon from "@ant-design/icons/lib/components/Icon";
 import { IUserInfomation } from "../../services/interfaces.ts";
 import { UserAvatarApp } from "../../apps/UserAvatarApp";
 import { useLocalStorageListener } from "../../services/utils.ts";
-import { ReactComponent as DocumentsSvg } from "../../svgs/Documents.svg";
-import { ReactComponent as WorkspacesSvg } from "../../svgs/Workspaces.svg";
+import DocumentsSvg from "../../svgs/Documents.svg?react";
+import WorkspacesSvg from "../../svgs/Workspaces.svg?react";
+import { clientServices } from "../../services/clientServices.ts";
+import { remoteServices } from "../../services/remoteServices.ts";
 
 export const dragClass = InjectClass(`
 -webkit-app-region: drag;
@@ -64,7 +66,7 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
                         delay(1000);
                     }
                 }
-                localServices.home();
+                clientServices.home();
                 updateCurrentTab(localStorage.getItem('currentTab') ?? "documents");
                 await self.current?.refreshUserInfo();
             }
@@ -76,7 +78,7 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
             }
         },
         refreshLayoutTabs: async () => {
-            let layout = await localServices.getLayout();
+            let layout = await remoteServices.getLayout();
             updateLayoutTabs(layout.tabs ?? []);
         }
     });
@@ -139,7 +141,7 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
             </Flex>
 
             <Flex className={dragClass} onMouseDown={e => {
-                localServices.mouseDownDrag();
+                clientServices.mouseDownDrag();
                 e.preventDefault();
                 e.stopPropagation();
             }} style={{
@@ -164,7 +166,7 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
                 }} style={{ padding: '0px 4px' }} info={userInfo}></UserAvatarApp>
                 <Button type='text' icon={<SettingOutlined />} onClick={() => {
                     let currentUrl = window.location.pathname;
-                    localServices.openUrl(currentUrl + '/settings', {
+                    clientServices.openUrl(currentUrl + '/settings', {
                         x: 'center',
                         y: "center",
                         width: '80%',
@@ -172,7 +174,7 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
                     });
                 }}>{"Settings"}</Button>
                 <Button type='text' icon={<CloseOutlined />} onClick={() => {
-                    localServices.close();
+                    clientServices.close();
                 }}>{"Close"}</Button>
             </Flex>
         </Flex>

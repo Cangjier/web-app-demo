@@ -12,8 +12,14 @@ if (debug) {
 const RemoteServices = () => {
     const base = BaseServices("http://localhost:19799");
     const api = base.api;
-
+    const getLayout = async () => {
+        let response = await api.get("/layout.json");
+        return response.data as {
+            tabs?: ILayoutTab[]
+        };
+    };
     return {
+        getLayout,
         ...base
     }
 }

@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import { IUserInfomation } from "../../services/interfaces";
 import { Flex } from "../../natived";
 import { UserOutlined } from "@ant-design/icons";
-import { ReactComponent as AvaterSvg } from "../../svgs/Avater.svg";
+import AvaterSvg from "../../svgs/Avater.svg?react";
 import Icon from "@ant-design/icons/lib/components/Icon";
 import { clientServices } from "../../services/clientServices";
 

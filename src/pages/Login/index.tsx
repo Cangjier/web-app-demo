@@ -5,6 +5,8 @@ import { Button, Spin } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { dragClass } from "../Home";
 import { ILoginInfo, IUserInfomation } from "../../services/interfaces";
+import { localServices } from "../../services/localServices";
+import { clientServices } from "../../services/clientServices";
 
 export interface ILoginRef {
 
@@ -22,9 +24,8 @@ export const Login = forwardRef<ILoginRef, ILoginProps>((props, ref) => {
         login: async (username: string, password: string, remember: boolean) => {
             updateLoading(true);
             try {
-                let info = await props.onLogin(username, password, remember);
+                let info = await localServices.login(username, password, remember);
                 localStorage.setItem('login', JSON.stringify(info));
-                if (props.onPostLogin) await props.onPostLogin(info);
             }
             catch {
 
@@ -35,7 +36,7 @@ export const Login = forwardRef<ILoginRef, ILoginProps>((props, ref) => {
             if (showLoading)
                 updateLoading(true);
             try {
-                let info = await props.onGetLoginInfo();
+                let info = await localServices.getLoginInfo();
                 updateUsername(info.username ?? "");
                 if (info.remember) updatePassword(info.password ?? "");
                 updateRemember(info.remember ?? true);
@@ -56,7 +57,7 @@ export const Login = forwardRef<ILoginRef, ILoginProps>((props, ref) => {
         <Spin spinning={loading} fullscreen></Spin>
         <Flex>
             <Flex className={dragClass} onMouseDown={e => {
-                services.mouseDownDrag();
+                clientServices.mouseDownDrag();
                 e.preventDefault();
                 e.stopPropagation();
             }} style={{
@@ -67,7 +68,7 @@ export const Login = forwardRef<ILoginRef, ILoginProps>((props, ref) => {
             </Flex>
             <Button type='text'
                 icon={<CloseOutlined></CloseOutlined>} onClick={() => {
-                    services.close();
+                    clientServices.close();
                 }}>
                 {"Close"}
             </Button>

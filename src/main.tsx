@@ -6,8 +6,17 @@ import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { Settings } from './pages/Settings';
 import { Chapters } from './pages/Chapters';
+import { InjectStyle } from './natived';
 const VITE_PUBLIC_URL = import.meta.env.VITE_PUBLIC_URL;
-
+console.log(`build time:${import.meta.env.VITE_APP_BUILD_TIME}`);
+InjectStyle(`
+body{
+  margin:0;
+}
+.ant-btn:not(:disabled):focus-visible {
+  outline: none;
+}
+`);
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

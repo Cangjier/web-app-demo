@@ -63,8 +63,8 @@ export const Settings = forwardRef<ISettingsRef, ISettingsProps>((props, ref) =>
                             updateLoadingTip(`正在获取 ${valueKey} 配置`);
                             updateLoadingPercent(getterIndex / getterCount * 100);
                             let configValue = await localServices.run(pluginName, {});
-                            if (configValue.defaultValue != undefined) {
-                                obj["defaultValue"] = configValue.defaultValue;
+                            if (configValue.defaultValue != undefined || configValue.currentValue != undefined) {
+                                obj["defaultValue"] = configValue.currentValue ?? configValue.defaultValue;
                             }
                             else {
                                 obj["defaultValue"] = configValue;

@@ -28,7 +28,7 @@ export const Settings = forwardRef<ISettingsRef, ISettingsProps>((props, ref) =>
     const foreachKey = async (value: any, validKeys: string[], onKeyValue: (obj: any, key: string, value: any) => Promise<any>) => {
         if (Array.isArray(value)) {
             for (let item of value) {
-               await foreachKey(item, validKeys, onKeyValue);
+                await foreachKey(item, validKeys, onKeyValue);
             }
         }
         else if (typeof value === 'object') {
@@ -62,7 +62,13 @@ export const Settings = forwardRef<ISettingsRef, ISettingsProps>((props, ref) =>
                             let valueKey = obj['valueKey'];
                             updateLoadingTip(`正在获取 ${valueKey} 配置`);
                             updateLoadingPercent(getterIndex / getterCount * 100);
-                            obj["defaultValue"] = await localServices.run(pluginName, {});
+                            let configValue = await localServices.run(pluginName, {});
+                            if (configValue.defaultValue != undefined) {
+                                obj["defaultValue"] = configValue.defaultValue;
+                            }
+                            else {
+                                obj["defaultValue"] = configValue;
+                            }
                             defaultValues[valueKey] = obj["defaultValue"];
                             getterIndex++;
                         }

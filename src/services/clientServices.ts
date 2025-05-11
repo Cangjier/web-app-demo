@@ -7,7 +7,7 @@ export const ClientServices = () => {
     const base = BaseServices("http://localhost:12332");
     const api = base.api;
 
-    const openUrl = async (url: string, location?: ILocation) => {
+    const openUrl = async (url: string, location?: ILocation, resident?: boolean) => {
         ///api/v1/app/open/
         if (location == undefined) {
             location = {
@@ -19,7 +19,8 @@ export const ClientServices = () => {
         }
         let response = await api.post("/api/v1/app/open", {
             url: window.location.origin + url,
-            location
+            location,
+            resident
         });
         if (response.status === 200) {
             return true;
@@ -92,6 +93,15 @@ export const ClientServices = () => {
         }
     }
 
+    const show = async () => {
+        let webapplication = (window as any).webapplication;
+        if (webapplication) {
+            await api.post("/api/v1/app/show", {
+                id: webapplication.id
+            });
+        }
+    }
+
     const getDataByID = async (id: string) => {
         let webapplication = (window as any).webapplication;
         if (webapplication) {
@@ -119,6 +129,7 @@ export const ClientServices = () => {
         close,
         minimize,
         getDataByID,
+        show,
         ...base
     }
 }

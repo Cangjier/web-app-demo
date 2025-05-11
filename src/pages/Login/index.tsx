@@ -49,6 +49,7 @@ export const Login = forwardRef<ILoginRef, ILoginProps>((props, ref) => {
     });
     useEffect(() => {
         self.current.refreshInfo(true);
+        clientServices.show();
     }, []);
     return <Flex direction='column' style={{
         width: '100vw',

@@ -171,7 +171,7 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
                         y: "center",
                         width: '80%',
                         height: '80%'
-                    });
+                    },true);
                 }}>{"Settings"}</Button>
                 <Button type='text' icon={<CloseOutlined />} onClick={() => {
                     clientServices.close();

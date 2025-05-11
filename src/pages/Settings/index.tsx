@@ -88,6 +88,7 @@ export const Settings = forwardRef<ISettingsRef, ISettingsProps>((props, ref) =>
     });
     useEffect(() => {
         self.current.refresh(true);
+        clientServices.show();
     }, []);
     const handleApply = async () => {
         let currentConfig = configRef.current?.getConfig();

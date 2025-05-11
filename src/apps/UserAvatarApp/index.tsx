@@ -62,7 +62,7 @@ export const UserAvatarApp = forwardRef<IUserAvatarAppRef, IUserAvatarAppProps>(
                     y: "center",
                     width: 450,
                     height: 600
-                });
+                },true);
             }} icon={<Icon component={AvaterSvg}></Icon>}>{props.info.isLogin ? props.info.name : "Login"}</Button>
         )
     }

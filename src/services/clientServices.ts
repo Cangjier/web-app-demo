@@ -39,7 +39,7 @@ export const ClientServices = () => {
         }
     }
 
-    const openwithdata = async (url: string, location?: ILocation, data?: any) => {
+    const openwithdata = async (url: string, location?: ILocation, data?: any,resident?: boolean) => {
         ///api/v1/app/open/
         if (url.startsWith("/")) {
             url = window.location.origin + url;
@@ -57,7 +57,8 @@ export const ClientServices = () => {
             url: `${url}?dataID=${dataID}`,
             location,
             dataID,
-            data: data ?? {}
+            data: data ?? {},
+            resident
         });
         if (response.status === 200) {
             return true;

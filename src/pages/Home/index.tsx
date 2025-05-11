@@ -24,7 +24,7 @@ export interface IHomeProps {
 
 export interface IHomeRef {
 
-    refreshUserInfo: () => Promise<void>,
+    // refreshUserInfo: () => Promise<void>,
     refresh: (showLoading: boolean) => Promise<void>,
     refreshLayoutTabs: () => Promise<void>
 }
@@ -42,18 +42,18 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
     const [loading, updateLoading, loadingRef] = useUpdate(false);
     const [loadingPercent, updateLoadingPercent, loadingPercentRef] = useUpdate<number | undefined>(undefined);
     const [loadingTip, updateLoadingTip, loadingTipRef] = useUpdate('');
-    const [userInfo, updateUserInfo] = useUpdate<IUserInfomation>({
-        isLogin: false
-    });
+    // const [userInfo, updateUserInfo] = useUpdate<IUserInfomation>({
+    //     isLogin: false
+    // });
     const [layoutTabs, updateLayoutTabs] = useUpdate<ILayoutTab[]>([]);
     const [currentTab, updateCurrentTab] = useUpdate<string>(localStorage.getItem('currentTab') ?? "documents");
     const delay = async (time: number) => new Promise(resolve => setTimeout(resolve, time));
     const self = useRef<IHomeRef>({
-        refreshUserInfo: async () => {
-            let userInfo = await localServices.getUserInfo();
-            updateUserInfo(userInfo);
-            localStorage.setItem("login", JSON.stringify(userInfo));
-        },
+        // refreshUserInfo: async () => {
+        //     let userInfo = await localServices.getUserInfo();
+        //     updateUserInfo(userInfo);
+        //     localStorage.setItem("login", JSON.stringify(userInfo));
+        // },
         refresh: async (showLoading: boolean) => {
             if (showLoading) updateLoading(true);
             try {
@@ -68,7 +68,7 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
                 }
                 clientServices.home();
                 updateCurrentTab(localStorage.getItem('currentTab') ?? "documents");
-                await self.current?.refreshUserInfo();
+                // await self.current?.refreshUserInfo();
             }
             catch (e) {
                 console.log(e);
@@ -90,10 +90,10 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
     useEffect(() => {
         localStorage.setItem('currentTab', currentTab);
     }, [currentTab]);
-    useLocalStorageListener("login", data => {
-        if (loadingRef.current) return;
-        updateUserInfo(JSON.parse(data));
-    });
+    // useLocalStorageListener("login", data => {
+    //     if (loadingRef.current) return;
+    //     updateUserInfo(JSON.parse(data));
+    // });
     const renderIcon = (icon?: string) => {
         if (icon == "documents") return <DocumentsSvg></DocumentsSvg>;
         else if (icon == "workspaces") return <WorkspacesSvg></WorkspacesSvg>
@@ -151,7 +151,7 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
 
             </Flex>
             <Flex spacing={'4px'} verticalCenter>
-                <UserAvatarApp onLogout={async () => {
+                {/* <UserAvatarApp onLogout={async () => {
                     updateLoading(true);
                     try {
                         await localServices.logout();
@@ -163,7 +163,7 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
                         console.log(e);
                     }
                     updateLoading(false);
-                }} style={{ padding: '0px 4px' }} info={userInfo}></UserAvatarApp>
+                }} style={{ padding: '0px 4px' }} info={userInfo}></UserAvatarApp> */}
                 <Button type='text' icon={<SettingOutlined />} onClick={() => {
                     let currentUrl = window.location.pathname;
                     clientServices.openUrl(currentUrl + '/settings', {
@@ -173,6 +173,9 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
                         height: '80%'
                     },true);
                 }}>{"Settings"}</Button>
+                <Button type='text' icon={<MinusOutlined />} onClick={() => {
+                    clientServices.minimize();
+                }}>{"Minimize"}</Button>
                 <Button type='text' icon={<CloseOutlined />} onClick={() => {
                     clientServices.close();
                 }}>{"Close"}</Button>

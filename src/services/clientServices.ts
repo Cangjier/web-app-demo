@@ -4,7 +4,7 @@ import { generateGUID } from "./utils";
 import { BaseServices } from "./baseServices";
 
 export const ClientServices = () => {
-    const base = BaseServices("http://localhost:12332");
+    const base = BaseServices((window as any).webapplication.baseURL ?? "http://localhost:12332");
     const api = base.api;
 
     const openUrl = async (url: string, location?: ILocation, resident?: boolean) => {

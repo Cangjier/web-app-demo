@@ -7,7 +7,6 @@ import { localServices } from "../../services/localServices.ts";
 import SidebarSvg from "../../svgs/Sidebar.svg?react";
 import Icon from "@ant-design/icons/lib/components/Icon";
 import { IUserInfomation } from "../../services/interfaces.ts";
-import { UserAvatarApp } from "../../apps/UserAvatarApp";
 import { useLocalStorageListener } from "../../services/utils.ts";
 import DocumentsSvg from "../../svgs/Documents.svg?react";
 import WorkspacesSvg from "../../svgs/Workspaces.svg?react";
@@ -23,8 +22,6 @@ export interface IHomeProps {
 }
 
 export interface IHomeRef {
-
-    // refreshUserInfo: () => Promise<void>,
     refresh: (showLoading: boolean) => Promise<void>,
     refreshLayoutTabs: () => Promise<void>
 }
@@ -39,23 +36,15 @@ export interface ILayoutTab {
 
 export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
     const [sidebarVisible, updateSidebarVisible, sidebarVisibleRef] = useUpdate(false);
-    const [loading, updateLoading, loadingRef] = useUpdate(false);
+    const [loading, updateLoading, loadingRef] = useUpdate(0);
     const [loadingPercent, updateLoadingPercent, loadingPercentRef] = useUpdate<number | undefined>(undefined);
     const [loadingTip, updateLoadingTip, loadingTipRef] = useUpdate('');
-    // const [userInfo, updateUserInfo] = useUpdate<IUserInfomation>({
-    //     isLogin: false
-    // });
     const [layoutTabs, updateLayoutTabs] = useUpdate<ILayoutTab[]>([]);
     const [currentTab, updateCurrentTab] = useUpdate<string>(localStorage.getItem('currentTab') ?? "documents");
     const delay = async (time: number) => new Promise(resolve => setTimeout(resolve, time));
     const self = useRef<IHomeRef>({
-        // refreshUserInfo: async () => {
-        //     let userInfo = await localServices.getUserInfo();
-        //     updateUserInfo(userInfo);
-        //     localStorage.setItem("login", JSON.stringify(userInfo));
-        // },
         refresh: async (showLoading: boolean) => {
-            if (showLoading) updateLoading(true);
+            if (showLoading) updateLoading(loading => loading + 1);
             try {
                 while (true) {
                     try {
@@ -68,13 +57,12 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
                 }
                 clientServices.home();
                 updateCurrentTab(localStorage.getItem('currentTab') ?? "documents");
-                // await self.current?.refreshUserInfo();
             }
             catch (e) {
                 console.log(e);
             }
             if (showLoading) {
-                updateLoading(false);
+                updateLoading(loading => loading - 1);
             }
         },
         refreshLayoutTabs: async () => {
@@ -90,10 +78,6 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
     useEffect(() => {
         localStorage.setItem('currentTab', currentTab);
     }, [currentTab]);
-    // useLocalStorageListener("login", data => {
-    //     if (loadingRef.current) return;
-    //     updateUserInfo(JSON.parse(data));
-    // });
     const renderIcon = (icon?: string) => {
         if (icon == "documents") return <DocumentsSvg></DocumentsSvg>;
         else if (icon == "workspaces") return <WorkspacesSvg></WorkspacesSvg>
@@ -117,16 +101,26 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
         }
     };
 
-    return <Flex style={{
+    return <div style={{
         ...props.style,
-        backgroundColor: '#f4f4f4'
-    }} direction='column'>
+        backgroundColor: '#f4f4f4',
+        display: 'flex',
+        flexDirection: 'column',
+    }}>
         <Spin size={'large'} tip={<div style={{
             marginTop: '32px'
-        }}>{loadingTip}</div>} percent={loadingPercent} spinning={loading} fullscreen></Spin>
+        }}>{loadingTip}</div>} percent={loadingPercent} spinning={loading > 0} fullscreen></Spin>
         {/* 顶部 */}
-        <Flex direction='row' style={{ backgroundColor: '#fff', margin: '0px 0px 2px 0px', padding: '0px 0px 0px 4px' }}>
-            <Flex verticalCenter style={{
+        <div style={{
+            backgroundColor: '#fff',
+            margin: '0px 0px 2px 0px',
+            padding: '0px 0px 0px 4px',
+            display: "flex",
+            flexDirection: 'row',
+        }}>
+            <div style={{
+                display: "flex",
+                alignItems: 'center',
                 padding: '0px 0px 0px 4px',
                 fontStyle: 'italic',
                 fontWeight: 'bold',
@@ -138,9 +132,9 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
                 userSelect: 'none'
             }}>
                 {"Web App"}
-            </Flex>
+            </div>
 
-            <Flex className={dragClass} onMouseDown={e => {
+            <div className={dragClass} onMouseDown={e => {
                 clientServices.mouseDownDrag();
                 e.preventDefault();
                 e.stopPropagation();
@@ -149,21 +143,12 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
                 userSelect: 'none'
             }}>
 
-            </Flex>
-            <Flex spacing={'4px'} verticalCenter>
-                {/* <UserAvatarApp onLogout={async () => {
-                    updateLoading(true);
-                    try {
-                        await localServices.logout();
-                        updateUserInfo({
-                            isLogin: false
-                        });
-                    }
-                    catch (e: any) {
-                        console.log(e);
-                    }
-                    updateLoading(false);
-                }} style={{ padding: '0px 4px' }} info={userInfo}></UserAvatarApp> */}
+            </div>
+            <div style={{
+                display: "flex",
+                alignItems: 'center',
+                gap: '4px',
+            }}>
                 <Button type='text' icon={<SettingOutlined />} onClick={() => {
                     let currentUrl = window.location.pathname;
                     clientServices.openUrl(currentUrl + '/settings', {
@@ -171,7 +156,7 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
                         y: "center",
                         width: '80%',
                         height: '80%'
-                    },true);
+                    }, true);
                 }}>{"Settings"}</Button>
                 <Button type='text' icon={<MinusOutlined />} onClick={() => {
                     clientServices.minimize();
@@ -179,43 +164,51 @@ export const Home = forwardRef<IHomeRef, IHomeProps>((props, ref) => {
                 <Button type='text' icon={<CloseOutlined />} onClick={() => {
                     clientServices.close();
                 }}>{"Close"}</Button>
-            </Flex>
+            </div>
 
-        </Flex>
+        </div>
         {/* 主体 */}
-        <Flex style={{
+        <div style={{
+            display: "flex",
+            flexDirection: "row",
             flex: 1,
             height: 0
-        }} direction='row'>
+        }}>
             {/* 侧边 */}
-            <Flex style={{
+            <div style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: '8px',
                 width: sidebarVisible ? '120px' : '30px',
                 backgroundColor: '#fff',
-                margin: '0px 2px 0px 0px',
+                margin: '0px 6px 0px 0px',
                 padding: '0px 4px',
-            }} direction='column' spacing={'8px'} spacingStart={'4px'}>
-                <Flex direction='column' style={{
+            }}>
+                <div style={{
+                    display: "flex",
+                    flexDirection: "column",
                     flex: 1,
                     alignItems: 'start',
                 }}>
                     {layoutTabs.map(tab => renderTab(tab))}
-                </Flex>
-                <Flex>
+                </div>
+                <div>
                     <Button type='text' icon={<SidebarSvg></SidebarSvg>} onClick={() => {
                         updateSidebarVisible(!sidebarVisible);
                     }}></Button>
-                </Flex>
-            </Flex>
-            {/* 内容 */}
-            <Flex style={{
+                </div>
+            </div>
+            <div style={{
+                display: "flex",
+                flexDirection: "column",
                 flex: 1,
                 width: 0,
                 backgroundColor: '#fff',
                 padding: '4px'
-            }} direction='column'>
+            }}>
                 {layoutTabs.map(item => renderContentByUrl(item))}
-            </Flex>
+            </div>
 
-        </Flex>
-    </Flex>
+        </div>
+    </div>
 });

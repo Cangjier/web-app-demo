@@ -7,7 +7,7 @@ if (debug) {
 }
 
 const LocalServices = () => {
-    const base = BaseServices("http://localhost:12332");
+    const base = BaseServices((window as any).webapplication.baseURL ?? "http://localhost:12332");
     const { api, runAsync } = base;
 
     const getUserInfo = async () => {
